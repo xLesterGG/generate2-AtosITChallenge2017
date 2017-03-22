@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <title>QR generator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Import the external JavaScript modules -->
+    <script type="text/javascript" language="JavaScript" src="js/entropy.js"></script>
+    <script type="text/javascript" language="JavaScript" src="js/aes.js"></script>
+    <script type="text/javascript" language="JavaScript" src="js/aesprng.js"></script>
+    <script type="text/javascript" language="JavaScript" src="js/md5.js"></script>
+    <script type="text/javascript" language="JavaScript" src="js/wordtab.js"></script>
+    <script type="text/javascript" language="JavaScript" src="js/utf-8.js"></script>
+    <script type="text/javascript" language="Javascript" src="js/pass_phrase.js"></script>   <!--Taken and modified from https://www.fourmilab.ch/javascrypt/pass_phrase.html -->
+
+
+    <script type="text/javascript" src="js/qrcode.js"></script> <!--taken and used from https://davidshimjs.github.io/qrcodejs/ -->
+
+
+    <script type="text/javascript" src="js/jquery-3.1.1.js"></script>
+    <script type="text/javascript" src="js/angular.js"></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="js/bootstrap.js"></script>
+
+</head>
+
+<body onload="nowLoaded(); ce(); GeneratePassPhrases();">
+
+    <!--Taken and modified from https://www.fourmilab.ch/javascrypt/pass_phrase.html -->
+    <div style="display:none">
+        <form name="seed" action="#" onsubmit="return false;">
+
+        <h3>Seed</h3>
+
+        <p align="center">
+        <input type="text" name="text" size="80" maxlength="1024"
+               style="background-color: rgb(255, 255, 200); color: #000000; font-family: monospace;"
+               onfocus="ce();" onblur="ce();" onkeydown="ce();" />
+        <br />
+        <input type="radio" checked="checked" name="keytype" onfocus="ce();" onblur="ce();" onclick="ce();" />&nbsp;Text
+        &nbsp;
+        <input type="radio" name="keytype" onfocus="ce();" onblur="ce();" onclick="ce();" />Hexadecimal
+
+        </p>
+        </form>
+
+        <form name="results" action="#" onsubmit="return false;">
+
+        <h3>Pass Phrases</h3>
+
+        <p align="center">
+        <textarea id="txtphrase" name="text" rows="24" cols="80"
+            style="border-color: blue; background-color: rgb(255, 255, 192); color: #000000;"
+            onfocus="ce();" onblur="ce();" onclick="ce();" onkeydown="ce();">
+        </textarea>
+
+        <br />
+
+        <input type="button" name="generate" value=" Generate " onfocus="ce();" onblur="ce();" onclick="ce(); GeneratePassPhrases();"/>
+        &nbsp;
+
+        </p>
+
+        <p align="center">
+        Phrases:&nbsp;<input type="text" name="howmany" size="4" maxlength="6" value="1"
+               onfocus="ce();" onblur="ce();" onkeydown="ce();" />
+        &nbsp;
+        Words:&nbsp;<input type="text" name="howlong" size="4" maxlength="6" value="12"
+               onfocus="ce();" onblur="ce();" onkeydown="ce();" />
+        &nbsp;
+        Bits:&nbsp;<input type="text" name="bits" size="5" maxlength="6" value=""
+               onfocus="ce();" onblur="ce(); bitsWord();" onkeydown="ce();" />
+
+        <br />
+
+        <input type="checkbox" checked="checked" name="number"
+               onfocus="ce();" onblur="ce();" onkeydown="ce();" />&nbsp;Number
+        &nbsp;
+        <input type="checkbox" name="uppercase"
+               onfocus="ce();" onblur="ce();" onkeydown="ce();" />&nbsp;upper&nbsp;case
+        &nbsp;
+        <input type="checkbox" name="signatures"
+               onfocus="ce();" onblur="ce();" onkeydown="ce();" />&nbsp;Include&nbsp;signatures
+
+        </p>
+        </form>
+
+    </div>
+    <!--Taken and modified from https://www.fourmilab.ch/javascrypt/pass_phrase.html -->
+
+
+
+    <div class="container" ng-controller="myCtrl">
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#">FoodChain™</a>
+                </div>
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">Home</a></li>
+                    <li><a href="#">Generate QR</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <div class="row">
+            <div class="col-md-8 col-xs-10">
+                <div class="form-group">
+                    <label for="generatedPassword">Generated Password</label>
+                    <input type="text" class="form-control" id="generatedPassword" readonly ng-model="password"/>
+                    <br />
+                    <button type="button" ng-show="showgetbutton" class="btn btn-primary btn-lg" ng-click="makeAccount(password)">Get Account Number</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4 col-xs-10">
+                <div class="form-group">
+                    <label for="accNum">Generated Account Number</label>
+                    <input type="text" class="form-control" id="accNum" readonly ng-model="accNum"/>
+                </div>
+            </div>
+        </div>
+
+
+        <button type="button" ng-show="showqrgen" class="btn btn-primary btn-lg" ng-click="getQRData(accNum)">Get QR</button>
+
+
+        <div id="qrcode"></div>
+
+    </div>
+
+
+</body>
+
+<script type="text/javascript" src="js/controller.js"></script> <!-- logics for this application-->
+
+
+
+
+
+</html>
