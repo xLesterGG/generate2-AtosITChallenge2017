@@ -5,11 +5,11 @@
         //echo $_GET['nxtAccountNumber'];
 
         $nxtAccountNumber = $_GET['nxtAccountNumber'];
-        $checkforacc = mysql_query("SELECT nxtAccountNumber,secretPhrase FROM nxtAccounts where nxtAccountNumber = '$nxtAccountNumber'");
+        $checkforacc = mysql_query("SELECT nxtAccountNumber,secretPhrase FROM nxtAccounts2 where nxtAccountNumber = '$nxtAccountNumber'");
 
         if(mysql_num_rows($checkforacc) != 0)
         {
-            $result = mysql_query("SELECT nxtAccountNumber,secretPhrase FROM nxtAccounts where nxtAccountNumber = '$nxtAccountNumber' LIMIT 1");
+            $result = mysql_query("SELECT nxtAccountNumber,secretPhrase FROM nxtAccounts2 where nxtAccountNumber = '$nxtAccountNumber' LIMIT 1");
             while($r = mysql_fetch_assoc($result)) {
                 $rows= $r;
             }

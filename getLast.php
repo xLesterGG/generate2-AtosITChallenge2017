@@ -1,11 +1,11 @@
 <?php
     include('dbconfig.php');
 
-    $checkfortrans = mysql_query("SELECT nxtAccountNumber,numberOfBatches,secretPhrase FROM nxtAccounts");
+    $checkfortrans = mysql_query("SELECT nxtAccountNumber,numberOfBatches,secretPhrase FROM nxtAccounts2");
 
     if(mysql_num_rows($checkfortrans) != 0)
     {
-        $result = mysql_query("SELECT * FROM nxtAccounts ORDER BY recordID DESC LIMIT 1");
+        $result = mysql_query("SELECT * FROM nxtAccounts2 ORDER BY recordID DESC LIMIT 1");
         $rows = array();
         while($r = mysql_fetch_assoc($result)) {
             $rows['accs'][]= $r;

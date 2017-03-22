@@ -8,7 +8,7 @@
         $recordID = $put_vars['recordID'];
         $numberofBatches = $put_vars['numberOfBatches'];
 
-        $sql = "UPDATE nxtaccounts SET numberOfBatches = '$numberofBatches' WHERE recordID = '$recordID' ";
+        $sql = "UPDATE nxtaccounts2 SET numberOfBatches = '$numberofBatches' WHERE recordID = '$recordID' ";
 
         echo $sql;
 
