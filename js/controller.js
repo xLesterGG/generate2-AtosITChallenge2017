@@ -157,6 +157,9 @@ app.controller("myCtrl",function($scope,$http){
         qrcode.makeCode(JSON.stringify(obj)); // turn into json
         $scope.showqrgen = false;  //hide qr button after generating
 
+
+        alert('Please generate the qr when dealing with a new batch of products by refreshing the page'); // th is is to ensure that the number of batches is incremented accordingly (100 batches per account)
+
         var url = "updateBatchCount.php";
 
         var data = $.param({
