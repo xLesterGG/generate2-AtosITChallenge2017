@@ -8,20 +8,16 @@
         $recordID = $put_vars['recordID'];
         $numberofBatches = $put_vars['numberOfBatches'];
 
-        $sql = "UPDATE nxtaccounts2 SET numberOfBatches = '$numberofBatches' WHERE recordID = '$recordID' ";
+        $sql = "UPDATE nxtAccounts2 SET numberOfBatches = '$numberofBatches' WHERE recordID = '$recordID' ";
 
-        echo $sql;
+        // echo $sql;
 
-        $result = @mysql_query($sql);
-
-        if($result)
-        {
+        if($conn->query($sql) === true){
             echo "Successfully updated batch count";
         }
-        else
-        {
+        else{
             echo "Error: " . $sql;
-        }
+        }        
     }
 
 ?>

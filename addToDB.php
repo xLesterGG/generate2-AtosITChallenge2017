@@ -7,18 +7,16 @@
         $numberofBatches = $_POST['numberOfBatches'];
         $secretPhrase = $_POST['secretPhrase'];
 
-        $sql = "INSERT INTO nxtaccounts2(nxtAccountNumber,numberofBatches,secretPhrase) VALUES ('$nxtAccountNumber','$numberofBatches','$secretPhrase')";
+        $sql = "INSERT INTO nxtAccounts2(nxtAccountNumber,numberOfBatches,secretPhrase) VALUES ('$nxtAccountNumber','$numberofBatches','$secretPhrase')";
 
-        $result = @mysql_query($sql);
-
-        if($result)
+        if($conn->query($sql))
         {
             echo "Successfully added";
         }
-        else
-        {
+        else{
             echo "Error: " . $sql ;
         }
+
     }
 
 ?>

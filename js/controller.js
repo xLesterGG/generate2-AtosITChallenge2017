@@ -22,34 +22,20 @@ app.controller("myCtrl",function($scope,$http){
 
                 }
                 else{
+                    console.log(response.data.accs[0].numberOfBatches);
+                    if(response.data.accs[0].numberOfBatches ==0){
+                        $scope.password = response.data.accs[0].secretPhrase;  //obtains secret phrase required for transaction for this particular account
+                        $scope.accNum = response.data.accs[0].nxtAccountNumber;  //obtains nxt account number which is also required for qr generation / transaction
+                        $scope.showgetbutton = false; // hides get account number button, only shown when there is no existing account / a new account needs to be generated
 
-                    $scope.password = document.results.text.value; //get password from a generated secret phrase using javascrypt (hidden div), https://www.fourmilab.ch/javascrypt/pass_phrase.html
-                    $scope.showqrgen = false; // hide generate qr button
-                    $scope.recordID = parseInt(response.data.accs[0].recordID) + 1;
-
-
-
-                    //working code for each account to have 100 batches, removed due to lack of coins.
-                    // if there are existing account
-                    // console.log(response.data.accs[0].numberOfBatches);
-                    //console.log(response.data.accs[0])
-
-                    // if(response.data.accs[0].numberOfBatches <100)  //information regarding the last account (most recent one will be retrieved)
-                    //                                                 //each account is supposed to carry 100 batches, if not yet reach 100, the information will be used for the next qr generation
-                    // {
-                    //     $scope.password = response.data.accs[0].secretPhrase;  //obtains secret phrase required for transaction for this particular account
-                    //     $scope.accNum = response.data.accs[0].nxtAccountNumber;  //obtains nxt account number which is also required for qr generation / transaction
-                    //     $scope.showgetbutton = false; // hides get account number button, only shown when there is no existing account / a new account needs to be generated
-                    //
-                    //     $scope.currentbatch = parseInt(response.data.accs[0].numberOfBatches); // obtains the current number of batches for this particular account
-                    //     $scope.recordID = response.data.accs[0].recordID; // obtains the record id of current account
-                    // }
-                    // else{ // if most recent account has 100 account (max)
-                        // $scope.password = document.results.text.value; //get password from a generated secret phrase using javascrypt (hidden div), https://www.fourmilab.ch/javascrypt/pass_phrase.html
-                        // $scope.showqrgen = false; // hide generate qr button
-                        // $scope.recordID = parseInt(response.data.accs[0].recordID) + 1;
-
-                    // }
+                        $scope.currentbatch = parseInt(response.data.accs[0].numberOfBatches); // obtains the current number of batches for this particular account
+                        $scope.recordID = response.data.accs[0].recordID; // obtains the record id of current account
+                    }
+                    else if(response.data.accs[0].numberOfBatches >0){
+                        $scope.password = document.results.text.value; //get password from a generated secret phrase using javascrypt (hidden div), https://www.fourmilab.ch/javascrypt/pass_phrase.html
+                        $scope.showqrgen = false; // hide generate qr button
+                        $scope.recordID = parseInt(response.data.accs[0].recordID) + 1;
+                    }
 
                 }
             },
@@ -167,7 +153,7 @@ app.controller("myCtrl",function($scope,$http){
         $scope.showqrgen = false;  //hide qr button after generating
 
 
-        alert('Please generate the qr when dealing with a new batch of products by refreshing the page'); // th is is to ensure that the number of batches is incremented accordingly (100 batches per account)
+//        alert('Please generate the qr when dealing with a new batch of products by refreshing the page'); // th is is to ensure that the number of batches is incremented accordingly (100 batches per account)
 
         var url = "updateBatchCount.php";
 
@@ -178,34 +164,24 @@ app.controller("myCtrl",function($scope,$http){
 
         $scope.currentbatch = $scope.currentbatch + 1; // updates data in current context
 
-        if($scope.currentbatch >100){  // this is to check if current account has >100 (after +1 above) as checking only occurs when loading a page, and page does not reload upon creating qr
-                                        // if user created few qr in a row without refreshing the page, this will catch the condition where the current batch is at 100 and refreshes the page to make new account.
-            alert('Account has over 100 batches, the page will now refresh for a new account.');
-            location.reload();
-        }
-        else{ // if account has not reached 100
-            var config = {
-                headers : {
-                    'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'
-                }
-            };
+        var config = {
+            headers : {
+                'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'
+            }
+        };
 
-            $http.put(url, data, config) // updates current account row , where batch + 1;
-    			.then(
-    				function (response) {
-                        console.log("success");
-                        console.log(response);
+        $http.post(url, data, config) // updates current account row , where batch + 1.   //post is used instead of put due to hosting with hosting server
+			.then(
+				function (response) {
+                    console.log("success");
+                    console.log(response);
 
-    				},
-    				function (response) {
-                        alert('Something went wrong when trying to update number of batches, please check console and contact your system administrator');
-                        console.log(response);
-    				}
-    			);
-        }
-
-
-
+				},
+				function (response) {
+                    alert('Something went wrong when trying to update number of batches, please check console and contact your system administrator');
+                    console.log(response);
+				}
+			);
     }
 
 
@@ -216,7 +192,6 @@ app.controller("myCtrl",function($scope,$http){
             $scope.showqrgen = true;
         }
     }
-
 
 
 });

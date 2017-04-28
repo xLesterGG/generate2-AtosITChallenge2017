@@ -5,20 +5,21 @@
         //echo $_GET['nxtAccountNumber'];
 
         $nxtAccountNumber = $_GET['nxtAccountNumber'];
-        $checkforacc = mysql_query("SELECT nxtAccountNumber,secretPhrase FROM nxtAccounts2 where nxtAccountNumber = '$nxtAccountNumber'");
+        $checkforacc = $conn->query("SELECT nxtAccountNumber,secretPhrase FROM nxtAccounts2 where nxtAccountNumber = '$nxtAccountNumber'");
 
-        if(mysql_num_rows($checkforacc) != 0)
+        // mysqli_num_rows($checkfortrans) == 0
+
+        if(mysqli_num_rows($checkforacc) == 0)
         {
-            $result = mysql_query("SELECT nxtAccountNumber,secretPhrase FROM nxtAccounts2 where nxtAccountNumber = '$nxtAccountNumber' LIMIT 1");
-            while($r = mysql_fetch_assoc($result)) {
+            echo 'No such account';
+        }
+        else{
+            $result = $conn->query("SELECT nxtAccountNumber,secretPhrase FROM nxtAccounts2 where nxtAccountNumber = '$nxtAccountNumber' LIMIT 1");
+            while($r = $result->fetch_assoc()) {
                 $rows= $r;
             }
 
             print json_encode($rows);
-
-        }
-        else{
-            echo 'No such account';
         }
     }
 
